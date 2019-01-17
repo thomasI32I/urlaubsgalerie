@@ -18,12 +18,12 @@ public class Graphic {
     // member variables
     final static String APPLICATION_NAME = "Fotogalerie";
 
-    MyFrame frame;
-    ImageControlComponent imageControlComponent; //TOP
-    DirectoryListComponent directoryListComponent; //LEFT
-    ImageGridComponent imageGridComponent; //CENTER
-    MetaDataComponent metaDataComponent; //RIGHT
-    DirectoryAdministrationComponent directoryAdministration; //END
+    private MyFrame frame;
+    private ImageControlComponent imageControlComponent; //TOP
+    private DirectoryListComponent directoryListComponent; //LEFT
+    private ImageGridComponent imageGridComponent; //CENTER
+    private MetaDataComponent metaDataComponent; //RIGHT
+    private DirectoryAdministrationComponent directoryAdministration; //END
 
     /**
      * Constructor
