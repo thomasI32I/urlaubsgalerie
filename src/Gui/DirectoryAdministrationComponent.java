@@ -12,9 +12,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- * This GUI component enables it to load {@link Directory}'s (from hard disk) into
- * the application.
- * 
+ * This GUI component enables it to load {@link Directory}'s (from hard disk)
+ * into the application.
+ *
  */
 public class DirectoryAdministrationComponent extends JPanel {
 
@@ -24,8 +24,8 @@ public class DirectoryAdministrationComponent extends JPanel {
     DirectoryListComponent directoryListComponent;
 
     /**
-     * Listener to start a JFileChooser dialog, in order to load a directory into
-     * the application.
+     * Listener to start a JFileChooser dialog, in order to load a directory
+     * into the application.
      */
     private class DirectoryChooserButtonListener implements ActionListener {
 
@@ -35,20 +35,20 @@ public class DirectoryAdministrationComponent extends JPanel {
             directoryChooser.setCurrentDirectory(new java.io.File("c:\\"));
             if (directoryChooser.showOpenDialog(DirectoryAdministrationComponent.this)
                     == JFileChooser.APPROVE_OPTION) {
-                
+
                 File selectedDirectory = directoryChooser.getSelectedFile();
                 String directoryPath = selectedDirectory.getAbsolutePath().replace("\\", "\\\\");
                 //query db if directory path already is stored.
-                boolean pathExists = DatabaseAccessManager.valueExists(DatabaseAccessManager.TABLE_DIRECTORY_PATH,
-                        DatabaseAccessManager.TABLE_COLUMN_PATH,
-                        directoryPath);
-
+//                boolean pathExists = DatabaseAccessManager.valueExists(DatabaseAccessManager.TABLE_DIRECTORY_PATH,
+//                        DatabaseAccessManager.TABLE_COLUMN_PATH,
+//                        directoryPath);
+                boolean pathExists = false;
                 if (!pathExists) { //path does not exist yet in data base
                     //add path to database
-                    String sqlCommand = String.format("INSERT INTO %s (path) VALUES ('%s')",
-                            DatabaseAccessManager.TABLE_DIRECTORY_PATH,
-                            directoryPath);
-                    DatabaseAccessManager.getInstance().execute(sqlCommand);
+//                    String sqlCommand = String.format("INSERT INTO %s (path) VALUES ('%s')",
+//                            DatabaseAccessManager.TABLE_DIRECTORY_PATH,
+//                            directoryPath);
+//                    DatabaseAccessManager.getInstance().execute(sqlCommand);
                     //add path to directoryList model
                     directoryListComponent.add(new Directory(selectedDirectory.getName(),
                             selectedDirectory.getAbsolutePath()));
@@ -70,7 +70,7 @@ public class DirectoryAdministrationComponent extends JPanel {
 
         directoryChooserButton = new JButton("Ordner hinzufügen");
         directoryChooserButton.addActionListener(new DirectoryChooserButtonListener());
-        
+
         directoryChooser = new JFileChooser();
         directoryChooser.setDialogTitle("Wählen Sie einen Ordner aus:");
         directoryChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

@@ -140,11 +140,11 @@ public class DirectoryListComponent extends JPanel {
                     if (response == JOptionPane.YES_OPTION) {
                         //delete this directory from db and DirectoryListComponent
                         String path = selectedDirectory.getPath().replace("\\", "\\\\");
-                        String sqlDeleteCommand = String.format("DELETE FROM %s WHERE %s = '%s'",
-                                DatabaseAccessManager.TABLE_DIRECTORY_PATH,
-                                DatabaseAccessManager.TABLE_COLUMN_PATH,
-                                path);
-                        DatabaseAccessManager.getInstance().execute(sqlDeleteCommand);
+//                        String sqlDeleteCommand = String.format("DELETE FROM %s WHERE %s = '%s'",
+//                                DatabaseAccessManager.TABLE_DIRECTORY_PATH,
+//                                DatabaseAccessManager.TABLE_COLUMN_PATH,
+//                                path);
+//                        DatabaseAccessManager.getInstance().execute(sqlDeleteCommand);
                         remove(selectedDirectory);
                     } else {
                         //do nothing
@@ -186,7 +186,7 @@ public class DirectoryListComponent extends JPanel {
         directoryList.addMouseListener(new DirectoryClickedListener());
         directoryList.addKeyListener(new DeleteDirectoryKeyListener());
 
-        DatabaseAccessManager.initializeDirectoryList(directoryListModel);
+        //DatabaseAccessManager.initializeDirectoryList(directoryListModel);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(directoryListHeading);

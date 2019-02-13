@@ -14,7 +14,7 @@ public class Application {
 
     public void start() throws SQLException {
         //init database connection
-        DatabaseAccessManager.initConnection();
+        //DatabaseAccessManager.initConnection();
         graphic = new Graphic();
     }
 }

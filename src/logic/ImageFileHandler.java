@@ -74,7 +74,7 @@ public class ImageFileHandler {
             scaledGridImages = new GridImage[images.length];
 
             for (int i = 0; i < images.length; i++) {
-                ImageIcon currentImage = new ImageIcon(images[i].getAbsolutePath());
+                ImageIcon currentImage = new ImageIcon(images[i].getAbsolutePath());            
                 List<ImageMetaData> propertyList = MetadataExtractor.extract(images[i]);
 
                 cachedGridImages[i] = new GridImage(images[i].getName(),
