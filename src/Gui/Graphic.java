@@ -1,17 +1,27 @@
 package Gui;
 
+import Data.Directory;
+import Gui.componentEvent.DirectoryViewEvent;
+import Gui.componentEvent.ImageGridEvent;
+import Gui.componentListener.DirectoryViewListener;
+import Data.GridImage;
+import Data.ImageDataTableModel;
+import Gui.componentEvent.DirectoryAdministrationEvent;
+import Gui.componentEvent.ImageControlEvent;
+import Gui.componentListener.DirectoryAdministrationListener;
+import Gui.componentListener.ImageControlListener;
 import MyTools.MyFrame;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import logic.ImageFileHandler;
+import logic.ImageReaderProgressPerformer;
+import logic.ImageScalerProgressPerformer;
 
 /**
  * Graphical user interface of the application.
- *
  */
 public class Graphic {
 
@@ -19,11 +29,11 @@ public class Graphic {
     final static String APPLICATION_NAME = "Fotogalerie";
 
     private MyFrame frame;
-    private ImageControlComponent imageControlComponent; //TOP
-    private DirectoryListComponent directoryListComponent; //LEFT
-    private ImageGridComponent imageGridComponent; //CENTER
-    private MetaDataComponent metaDataComponent; //RIGHT
-    private DirectoryAdministrationComponent directoryAdministration; //END
+    private ImageControl imageControl; //TOP
+    private DirectoryView directoryView; //LEFT
+    private ImageGrid imageGrid; //CENTER
+    private ImageMetaDataView imageMetaDataView; //RIGHT
+    private DirectoryAdministration directoryAdministration; //END
 
     /**
      * Constructor
@@ -43,32 +53,73 @@ public class Graphic {
                 frame = new MyFrame(APPLICATION_NAME);
                 frame.setLayout(new BorderLayout(5, 5));
 
-                metaDataComponent = new MetaDataComponent();
-                imageGridComponent = new ImageGridComponent(metaDataComponent);
-                
-                try {
-                    directoryListComponent = new DirectoryListComponent(imageGridComponent, metaDataComponent);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Graphic.class.getName()).log(Level.SEVERE, null, ex);
-                }
-              
-                directoryAdministration = new DirectoryAdministrationComponent(directoryListComponent);
-                imageControlComponent = new ImageControlComponent(imageGridComponent);
+                imageControl = new ImageControl();
+                directoryView = new DirectoryView();
+                imageGrid = new ImageGrid();
+                imageMetaDataView = new ImageMetaDataView();
+                directoryAdministration = new DirectoryAdministration();
+
+                wireComponents();
 
                 //frame component building
-                frame.add(imageControlComponent, BorderLayout.PAGE_START);
-                frame.add(directoryListComponent, BorderLayout.LINE_START);
-                frame.add(imageGridComponent, BorderLayout.CENTER);
-                frame.add(metaDataComponent, BorderLayout.LINE_END);
+                frame.add(imageControl, BorderLayout.PAGE_START);
+                frame.add(directoryView, BorderLayout.LINE_START);
+                frame.add(imageGrid, BorderLayout.CENTER);
+                frame.add(imageMetaDataView, BorderLayout.LINE_END);
                 frame.add(directoryAdministration, BorderLayout.PAGE_END);
 
-                frame.addComponentListener(new ComponentAdapter() {
-                    @Override
-                    public void componentResized(ComponentEvent e) {
-                        imageGridComponent.updateLayout();
-                    }
-                });
                 frame.show(1500, 600);
+            }
+        });
+    }
+
+    /**
+     * Set gui components interaction with each other
+     */
+    private void wireComponents() {
+
+        imageControl.setImageControlListener(new ImageControlListener() {
+            @Override
+            public void imageSizeEventOccurred(ImageControlEvent ev) {
+                float hundred = 100.0F;
+                ImageFileHandler.setScalingFactor(ev.getScaleSize() / hundred);
+
+                ImageScalerProgressPerformer imageScalerProgressPerformer = new ImageScalerProgressPerformer(imageGrid);
+                imageScalerProgressPerformer.execute();
+            }
+        });
+
+        directoryView.setDirectoryViewListener(new DirectoryViewListener() {
+            @Override
+            public void directorySelectionEventOccurred(DirectoryViewEvent ev) {
+                imageMetaDataView.clear();
+                String selectedDirectory = ev.getSelectedDirectory();
+                ImageReaderProgressPerformer imageProgressPerformer = new ImageReaderProgressPerformer(imageGrid, selectedDirectory);
+                imageProgressPerformer.execute();
+            }
+        });
+
+        imageGrid.setImageGridListener((ImageGridEvent imageSelectionEvent) -> {
+            imageMetaDataView.clear();
+            GridImage gridImage = imageSelectionEvent.getSelectedGridImage();
+            if (gridImage != null) {
+                imageMetaDataView.setInput(new ImageDataTableModel(gridImage.getMetaDataList()));
+            }
+        });
+
+        directoryAdministration.setDirectoryAdminListener(new DirectoryAdministrationListener() {
+            @Override
+            public void directorySelectionEventOccurred(DirectoryAdministrationEvent ev) {
+                Directory directoryToAdd = new Directory(ev.getDirectory().getName(),
+                        ev.getDirectory().getAbsolutePath());
+                directoryView.add(directoryToAdd);
+            }
+        });
+
+        frame.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                imageGrid.updateLayout();
             }
         });
     }

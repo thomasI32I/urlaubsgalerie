@@ -1,6 +1,7 @@
 package Gui;
 
-import logic.DatabaseAccessManager;
+import Gui.componentEvent.DirectoryViewEvent;
+import Gui.componentListener.DirectoryViewListener;
 import Data.Directory;
 import Data.SelectionCustomizedList;
 import java.awt.Component;
@@ -11,9 +12,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.DefaultListModel;
@@ -27,45 +25,36 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import logic.ImageReaderProgressPerformer;
 
 /**
- * This class represents the GUI component where the available {@link Directory}'s
- * are displayed. It is possible to select, unselect or remove these {@link Directory}'s
- * from this component.
+ * This class represents the GUI component where the available
+ * {@link Directory}'s are displayed. It is possible to select, unselect or
+ * remove these {@link Directory}'s from this component.
  *
  */
-public class DirectoryListComponent extends JPanel {
+public class DirectoryView extends JPanel {
 
     private final JLabel directoryListHeading;
     private final JList<Directory> directoryList;
     private final DefaultListModel<Directory> directoryListModel;
-    
-    private final ImageGridComponent imageGridComponent;
-    private final MetaDataComponent metaDataComponent;
+
+    private DirectoryViewListener directoryViewListener;
 
     /**
-     * Selection handling of {@link Directory}'s. Due to potentially long processing
-     * times of images of the specific directories a backround thread, done by a
-     * SwingWorker, is used to load and process images from hard disk.
+     * Selection handling of {@link Directory}'s. Due to potentially long
+     * processing times of images of the specific directories a backround
+     * thread, done by a SwingWorker, is used to load and process images from
+     * hard disk.
      */
     private class DirectorySelectionListener implements ListSelectionListener {
 
         @Override
         public void valueChanged(ListSelectionEvent event) {
-
             if (!event.getValueIsAdjusting()) {
-                try {
-                    //reset meta data component
-                    metaDataComponent.clear();
-                    Directory selectedDirectory = directoryList.getSelectedValue();
-                    String directoryPath = (selectedDirectory != null) ? selectedDirectory.getPath() : "";
-
-                    ImageReaderProgressPerformer imageProgressPerformer = new ImageReaderProgressPerformer(imageGridComponent, directoryPath);
-                    imageProgressPerformer.execute();
-
-                } catch (Exception ex) {
-                    Logger.getLogger(Graphic.class.getName()).log(Level.SEVERE, null, ex);
+                Directory selectedDirectory = directoryList.getSelectedValue();
+                String directoryPath = (selectedDirectory != null) ? selectedDirectory.getPath() : "";
+                if (directoryViewListener != null) {
+                    directoryViewListener.directorySelectionEventOccurred(new DirectoryViewEvent(DirectoryView.this, directoryPath));
                 }
             }
         }
@@ -113,7 +102,7 @@ public class DirectoryListComponent extends JPanel {
     }
 
     /**
-     * Handles deletion events of {@link Directory}'s. If a {@link Directory} is 
+     * Handles deletion events of {@link Directory}'s. If a {@link Directory} is
      * selected it can be removed by pressing the delete key.
      */
     private class DeleteDirectoryKeyListener implements KeyListener {
@@ -136,7 +125,7 @@ public class DirectoryListComponent extends JPanel {
                             "Ordner entfernen",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.QUESTION_MESSAGE);
-                    
+
                     if (response == JOptionPane.YES_OPTION) {
                         //delete this directory from db and DirectoryListComponent
                         String path = selectedDirectory.getPath().replace("\\", "\\\\");
@@ -161,15 +150,8 @@ public class DirectoryListComponent extends JPanel {
     /**
      * Constructor
      *
-     * @param imageGridComponent. GUI component ImageGridComponent.
-     * @param metaDataComponent. GUI component MetaDataComponent.
-     * @throws SQLException
      */
-    public DirectoryListComponent(ImageGridComponent imageGridComponent,
-            MetaDataComponent metaDataComponent) throws SQLException {
-
-        this.imageGridComponent = imageGridComponent;
-        this.metaDataComponent = metaDataComponent;
+    public DirectoryView() {
 
         directoryListHeading = new JLabel("Ordnerübersicht");
         directoryListHeading.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -187,7 +169,6 @@ public class DirectoryListComponent extends JPanel {
         directoryList.addKeyListener(new DeleteDirectoryKeyListener());
 
         //DatabaseAccessManager.initializeDirectoryList(directoryListModel);
-
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(directoryListHeading);
         add(Box.createVerticalStrut(10));
@@ -210,6 +191,10 @@ public class DirectoryListComponent extends JPanel {
      */
     public void remove(Directory directoryToRemove) {
         directoryListModel.removeElement(directoryToRemove);
+    }
+
+    public void setDirectoryViewListener(DirectoryViewListener directoryViewListener) {
+        this.directoryViewListener = directoryViewListener;
     }
 
 }

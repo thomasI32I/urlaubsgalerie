@@ -1,8 +1,8 @@
 package logic;
 
 import Data.GridImage;
-import Gui.ImageGridComponent;
-import Gui.ProgressbarComponent;
+import Gui.ImageGrid;
+import Gui.Progressbar;
 import javax.swing.SwingWorker;
 
 /**
@@ -11,8 +11,8 @@ import javax.swing.SwingWorker;
  */
 public class ImageReaderProgressPerformer extends SwingWorker<GridImage[], Object> {
 
-    ProgressbarComponent progressBarComponent;
-    ImageGridComponent imageGridComponent;
+    Progressbar progressBarComponent;
+    ImageGrid imageGridComponent;
 
     String directoryPath;
 
@@ -22,10 +22,10 @@ public class ImageReaderProgressPerformer extends SwingWorker<GridImage[], Objec
      * @param imageGridComponent. The component where {@link GridImage}'s are displayed.
      * @param directoryPath. The directory path.
      */
-    public ImageReaderProgressPerformer(ImageGridComponent imageGridComponent,
+    public ImageReaderProgressPerformer(ImageGrid imageGridComponent,
             String directoryPath) {
 
-        this.progressBarComponent = new ProgressbarComponent(imageGridComponent);
+        this.progressBarComponent = new Progressbar(imageGridComponent);
         progressBarComponent.createProgressUI();
         this.progressBarComponent.getProgressBar().setVisible(true);
         this.progressBarComponent.getProgressBar().setIndeterminate(true);

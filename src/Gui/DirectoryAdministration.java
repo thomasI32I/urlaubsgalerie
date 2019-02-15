@@ -1,7 +1,8 @@
 package Gui;
 
-import logic.DatabaseAccessManager;
-import Data.Directory;
+//import Data.Directory;
+import Gui.componentEvent.DirectoryAdministrationEvent;
+import Gui.componentListener.DirectoryAdministrationListener;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +17,12 @@ import javax.swing.JPanel;
  * into the application.
  *
  */
-public class DirectoryAdministrationComponent extends JPanel {
+public class DirectoryAdministration extends JPanel {
 
     private final JButton directoryChooserButton;
     private final JFileChooser directoryChooser;
-
-    DirectoryListComponent directoryListComponent;
+    
+    DirectoryAdministrationListener directoryAdminListener;
 
     /**
      * Listener to start a JFileChooser dialog, in order to load a directory
@@ -33,7 +34,7 @@ public class DirectoryAdministrationComponent extends JPanel {
         public void actionPerformed(ActionEvent event) {
 
             directoryChooser.setCurrentDirectory(new java.io.File("c:\\"));
-            if (directoryChooser.showOpenDialog(DirectoryAdministrationComponent.this)
+            if (directoryChooser.showOpenDialog(DirectoryAdministration.this)
                     == JFileChooser.APPROVE_OPTION) {
 
                 File selectedDirectory = directoryChooser.getSelectedFile();
@@ -49,9 +50,10 @@ public class DirectoryAdministrationComponent extends JPanel {
 //                            DatabaseAccessManager.TABLE_DIRECTORY_PATH,
 //                            directoryPath);
 //                    DatabaseAccessManager.getInstance().execute(sqlCommand);
-                    //add path to directoryList model
-                    directoryListComponent.add(new Directory(selectedDirectory.getName(),
-                            selectedDirectory.getAbsolutePath()));
+                    
+                    DirectoryAdministrationEvent ev = new DirectoryAdministrationEvent(DirectoryAdministration.this, selectedDirectory);
+                    directoryAdminListener.directorySelectionEventOccurred(ev);
+
                 } else { //path exists already
                     JOptionPane.showMessageDialog(null, "Der von ihnen eingegebene Ordnerpfad ist bereits vorhanden.");
                 }
@@ -64,9 +66,8 @@ public class DirectoryAdministrationComponent extends JPanel {
     /**
      * Constructor
      *
-     * @param directoryListComponent GUI component DirectoryListComponent
      */
-    public DirectoryAdministrationComponent(DirectoryListComponent directoryListComponent) {
+    public DirectoryAdministration() {
 
         directoryChooserButton = new JButton("Ordner hinzufügen");
         directoryChooserButton.addActionListener(new DirectoryChooserButtonListener());
@@ -79,8 +80,9 @@ public class DirectoryAdministrationComponent extends JPanel {
 
         setLayout(new FlowLayout(FlowLayout.LEFT));
         add(directoryChooserButton);
-
-        this.directoryListComponent = directoryListComponent;
     }
 
+    public void setDirectoryAdminListener(DirectoryAdministrationListener directoryAdminListener) {
+        this.directoryAdminListener = directoryAdminListener;
+    }
 }

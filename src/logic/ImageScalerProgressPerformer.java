@@ -1,8 +1,8 @@
 package logic;
 
 import Data.GridImage;
-import Gui.ImageGridComponent;
-import Gui.ProgressbarComponent;
+import Gui.ImageGrid;
+import Gui.Progressbar;
 import javax.swing.SwingWorker;
 
 /**
@@ -11,17 +11,17 @@ import javax.swing.SwingWorker;
  */
 public class ImageScalerProgressPerformer extends SwingWorker<GridImage[], Object> {
 
-    ProgressbarComponent progressBarComponent;
-    ImageGridComponent imageGalleryComponent;
+    Progressbar progressBarComponent;
+    ImageGrid imageGalleryComponent;
 
     /**
      * Constructors
      * 
      * @param imageGalleryComponent GUI component ImageGridComponent.
      */
-    public ImageScalerProgressPerformer(ImageGridComponent imageGalleryComponent) {
+    public ImageScalerProgressPerformer(ImageGrid imageGalleryComponent) {
 
-        this.progressBarComponent = new ProgressbarComponent(imageGalleryComponent);
+        this.progressBarComponent = new Progressbar(imageGalleryComponent);
         progressBarComponent.createProgressUI();
         this.progressBarComponent.getProgressBar().setVisible(true);
         this.progressBarComponent.getProgressBar().setIndeterminate(true);
