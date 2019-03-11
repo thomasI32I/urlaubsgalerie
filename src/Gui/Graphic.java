@@ -84,7 +84,8 @@ public class Graphic {
                 float hundred = 100.0F;
                 ImageFileHandler.setScalingFactor(ev.getScaleSize() / hundred);
 
-                ImageScalerProgressPerformer imageScalerProgressPerformer = new ImageScalerProgressPerformer(imageGrid);
+                ImageScalerProgressPerformer imageScalerProgressPerformer
+                        = new ImageScalerProgressPerformer(imageGrid);
                 imageScalerProgressPerformer.execute();
             }
         });
@@ -94,7 +95,8 @@ public class Graphic {
             public void directorySelectionEventOccurred(DirectoryViewEvent ev) {
                 imageMetaDataView.clear();
                 String selectedDirectory = ev.getSelectedDirectory();
-                ImageReaderProgressPerformer imageProgressPerformer = new ImageReaderProgressPerformer(imageGrid, selectedDirectory);
+                ImageReaderProgressPerformer imageProgressPerformer
+                        = new ImageReaderProgressPerformer(imageGrid, selectedDirectory);
                 imageProgressPerformer.execute();
             }
         });
@@ -110,8 +112,8 @@ public class Graphic {
         directoryAdministration.setDirectoryAdminListener(new DirectoryAdministrationListener() {
             @Override
             public void directorySelectionEventOccurred(DirectoryAdministrationEvent ev) {
-                Directory directoryToAdd = new Directory(ev.getDirectory().getName(),
-                        ev.getDirectory().getAbsolutePath());
+                Directory directoryToAdd
+                        = new Directory(ev.getDirectory().getName(), ev.getDirectory().getAbsolutePath());
                 directoryView.add(directoryToAdd);
             }
         });

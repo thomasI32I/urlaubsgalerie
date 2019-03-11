@@ -11,8 +11,8 @@ import javax.swing.SwingWorker;
  */
 public class ImageReaderProgressPerformer extends SwingWorker<GridImage[], Object> {
 
-    Progressbar progressBarComponent;
-    ImageGrid imageGridComponent;
+    Progressbar progressBar;
+    ImageGrid imageGrid;
 
     String directoryPath;
 
@@ -25,12 +25,12 @@ public class ImageReaderProgressPerformer extends SwingWorker<GridImage[], Objec
     public ImageReaderProgressPerformer(ImageGrid imageGridComponent,
             String directoryPath) {
 
-        this.progressBarComponent = new Progressbar(imageGridComponent);
-        progressBarComponent.createProgressUI();
-        this.progressBarComponent.getProgressBar().setVisible(true);
-        this.progressBarComponent.getProgressBar().setIndeterminate(true);
+        this.progressBar = new Progressbar(imageGridComponent);
+        progressBar.createProgressUI();
+        this.progressBar.getProgressBar().setVisible(true);
+        this.progressBar.getProgressBar().setIndeterminate(true);
 
-        this.imageGridComponent = imageGridComponent;
+        this.imageGrid = imageGridComponent;
         this.directoryPath = directoryPath;
     }
 
@@ -40,15 +40,15 @@ public class ImageReaderProgressPerformer extends SwingWorker<GridImage[], Objec
         GridImage[] images;
         images = ImageFileHandler.createGridImages(directoryPath);
 
-        imageGridComponent.setInput(images);
+        imageGrid.setInput(images);
 
         return images;
     }
 
     @Override
     protected void done() {
-        progressBarComponent.getProgressBar().setVisible(false);
-        progressBarComponent.setVisible(false);
+        progressBar.getProgressBar().setVisible(false);
+        progressBar.setVisible(false);
     }
 
 }
