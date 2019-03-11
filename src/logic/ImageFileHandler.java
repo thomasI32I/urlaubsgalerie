@@ -1,8 +1,8 @@
 package logic;
 
-import Data.GridImage;
-import Data.ImageMetaData;
-import Gui.ImageGridComponent;
+import data.GridImage;
+import data.ImageMetaData;
+import gui.ImageGrid;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.annotations.NotNull;
 import com.drew.metadata.MetadataException;
@@ -74,7 +74,7 @@ public class ImageFileHandler {
             scaledGridImages = new GridImage[images.length];
 
             for (int i = 0; i < images.length; i++) {
-                ImageIcon currentImage = new ImageIcon(images[i].getAbsolutePath());
+                ImageIcon currentImage = new ImageIcon(images[i].getAbsolutePath());            
                 List<ImageMetaData> propertyList = MetadataExtractor.extract(images[i]);
 
                 cachedGridImages[i] = new GridImage(images[i].getName(),
@@ -121,8 +121,8 @@ public class ImageFileHandler {
     private static ImageIcon scale(ImageIcon pictureToResize) {
 
         Image image = pictureToResize.getImage();
-        Image scaledImage = image.getScaledInstance((int) (ImageGridComponent.MAX_GRID_IMAGE_WIDTH * scalingFactor),
-                (int) (ImageGridComponent.MAX_GRID_IMAGE_HEIGHT * scalingFactor),
+        Image scaledImage = image.getScaledInstance((int) (ImageGrid.MAX_GRID_IMAGE_WIDTH * scalingFactor),
+                (int) (ImageGrid.MAX_GRID_IMAGE_HEIGHT * scalingFactor),
                 Image.SCALE_SMOOTH); // scale it the smooth way
 
         return new ImageIcon(scaledImage);

@@ -1,8 +1,8 @@
 package logic;
 
-import Data.GridImage;
-import Gui.ImageGridComponent;
-import Gui.ProgressbarComponent;
+import data.GridImage;
+import gui.ImageGrid;
+import gui.Progressbar;
 import javax.swing.SwingWorker;
 
 /**
@@ -11,8 +11,8 @@ import javax.swing.SwingWorker;
  */
 public class ImageReaderProgressPerformer extends SwingWorker<GridImage[], Object> {
 
-    ProgressbarComponent progressBarComponent;
-    ImageGridComponent imageGridComponent;
+    Progressbar progressBar;
+    ImageGrid imageGrid;
 
     String directoryPath;
 
@@ -22,15 +22,15 @@ public class ImageReaderProgressPerformer extends SwingWorker<GridImage[], Objec
      * @param imageGridComponent. The component where {@link GridImage}'s are displayed.
      * @param directoryPath. The directory path.
      */
-    public ImageReaderProgressPerformer(ImageGridComponent imageGridComponent,
+    public ImageReaderProgressPerformer(ImageGrid imageGridComponent,
             String directoryPath) {
 
-        this.progressBarComponent = new ProgressbarComponent(imageGridComponent);
-        progressBarComponent.createProgressUI();
-        this.progressBarComponent.getProgressBar().setVisible(true);
-        this.progressBarComponent.getProgressBar().setIndeterminate(true);
+        this.progressBar = new Progressbar(imageGridComponent);
+        progressBar.createProgressUI();
+        this.progressBar.getProgressBar().setVisible(true);
+        this.progressBar.getProgressBar().setIndeterminate(true);
 
-        this.imageGridComponent = imageGridComponent;
+        this.imageGrid = imageGridComponent;
         this.directoryPath = directoryPath;
     }
 
@@ -40,15 +40,15 @@ public class ImageReaderProgressPerformer extends SwingWorker<GridImage[], Objec
         GridImage[] images;
         images = ImageFileHandler.createGridImages(directoryPath);
 
-        imageGridComponent.setInput(images);
+        imageGrid.setInput(images);
 
         return images;
     }
 
     @Override
     protected void done() {
-        progressBarComponent.getProgressBar().setVisible(false);
-        progressBarComponent.setVisible(false);
+        progressBar.getProgressBar().setVisible(false);
+        progressBar.setVisible(false);
     }
 
 }
