@@ -1,6 +1,6 @@
 package logic;
 
-import Data.ImageMetaData;
+import data.ImageMetaData;
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;

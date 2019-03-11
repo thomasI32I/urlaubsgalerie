@@ -1,6 +1,7 @@
-package Gui.componentListener;
+package gui;
 
-import Gui.componentEvent.ImageControlEvent;
+
+
 import java.util.EventListener;
 
 /**

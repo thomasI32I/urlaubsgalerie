@@ -1,6 +1,6 @@
 package logic;
 
-import Data.Directory;
+import data.Directory;
 import java.io.File;
 import java.sql.Statement;
 import java.sql.Connection;

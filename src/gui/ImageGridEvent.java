@@ -1,6 +1,8 @@
-package Gui.componentEvent;
+package gui;
 
-import Data.GridImage;
+
+
+import data.GridImage;
 import java.util.EventObject;
 
 /**

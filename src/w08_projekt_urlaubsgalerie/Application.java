@@ -1,8 +1,7 @@
 package w08_projekt_urlaubsgalerie;
 
-import Gui.Graphic;
+import gui.Graphic;
 import java.sql.SQLException;
-import logic.DatabaseAccessManager;
 
 /**
  *

@@ -1,8 +1,8 @@
 package logic;
 
-import Data.GridImage;
-import Data.ImageMetaData;
-import Gui.ImageGrid;
+import data.GridImage;
+import data.ImageMetaData;
+import gui.ImageGrid;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.lang.annotations.NotNull;
 import com.drew.metadata.MetadataException;

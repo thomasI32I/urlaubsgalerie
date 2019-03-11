@@ -1,8 +1,8 @@
 package logic;
 
-import Data.GridImage;
-import Gui.ImageGrid;
-import Gui.Progressbar;
+import data.GridImage;
+import gui.ImageGrid;
+import gui.Progressbar;
 import javax.swing.SwingWorker;
 
 /**
